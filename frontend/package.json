@@ -1,0 +1,13 @@
+{
+  "name": "line-miniapp-cocos2djs-sample-frontend",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Static frontend (cocos2d-html5 + LIFF) for the LINE Mini App PoC.",
+  "scripts": {
+    "dev": "serve . -l 3000 --cors",
+    "dev:proxy": "node ../scripts/dev-proxy.js"
+  },
+  "devDependencies": {
+    "serve": "^14.2.4"
+  }
+}

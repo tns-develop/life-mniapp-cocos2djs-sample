@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport"
+        content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="format-detection" content="telephone=no" />
+  <title>Tap Tap Coin (LINE Mini App PoC)</title>
+  <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+      background: #111;
+      height: 100%;
+      overflow: hidden;
+      -webkit-tap-highlight-color: transparent;
+    }
+    /* Android Edge-to-edge対策（2026/3/9〜） */
+    body {
+      padding-bottom: env(safe-area-inset-bottom);
+    }
+    #gameCanvas {
+      display: block;
+      margin: 0 auto;
+      background: #111;
+      /* iOSで余計なスクロールを起こさない */
+      touch-action: none;
+    }
+    #boot-error {
+      position: fixed;
+      inset: 0;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      color: #fff;
+      font-family: sans-serif;
+      padding: 24px;
+      text-align: center;
+      background: #222;
+    }
+    #boot-error.visible { display: flex; }
+  </style>
+  <!--
+    LIFF SDK (CDN)。アプリ内課金 (liff.iap.*) を使うには 2.26.0 以上が必要。
+    バージョン固定したい場合は edge/versions/2.28.0/sdk.js のように指定可能。
+  -->
+  <script charset="utf-8" src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
+</head>
+<body>
+  <canvas id="gameCanvas"></canvas>
+  <div id="boot-error">
+    <div>
+      <h2>起動に失敗しました</h2>
+      <p>LINEアプリ内で開き直すか、開発者にお問い合わせください。</p>
+      <pre id="boot-error-detail" style="white-space: pre-wrap; text-align: left;"></pre>
+    </div>
+  </div>
+
+  <!-- LIFF橋渡し（cocos2d-jsより先に評価される必要がある） -->
+  <script src="src/liff-bridge.js"></script>
+
+  <!--
+    cocos2d-html5本体。`scripts/download-cocos2d.sh` で取得されたファイルを読む。
+    download先のファイル名が違う場合はここを書き換える。
+  -->
+  <script charset="utf-8" src="lib/cocos2d-html5/CCBoot.js"></script>
+  <script charset="utf-8" src="main.js"></script>
+</body>
+</html>

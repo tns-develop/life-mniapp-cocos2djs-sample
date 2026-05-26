@@ -1,0 +1,26 @@
+{
+  "project_type": "javascript",
+
+  "debugMode": 1,
+  "showFPS": false,
+  "frameRate": 60,
+  "noCache": false,
+
+  "id": "gameCanvas",
+
+  "renderMode": 0,
+
+  "engineDir": "lib/cocos2d-html5/",
+
+  "modules": ["cocos2d"],
+
+  "jsList": [
+    "src/liff-bridge.js",
+    "src/Store.js",
+    "src/ui.js",
+    "src/TitleScene.js",
+    "src/MenuScene.js",
+    "src/GameScene.js",
+    "src/ShopScene.js"
+  ]
+}
