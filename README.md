@@ -96,33 +96,43 @@ cp .env.example .env
 #   PORT=4000
 ```
 
-### 4. ローカル起動
+### 4. 起動 / デプロイ
 
-ターミナル4枚使うのが楽。
+frontend と server で公開手段を分ける（詳細は [HUMAN-SETUP.md の C 章](./HUMAN-SETUP.md#c-開発実行環境)）。
+
+#### (A) frontend：GitHub Pages にデプロイ（推奨）
+
+`main` に push すれば `.github/workflows/deploy-frontend.yml` が走り、`https://<user>.github.io/<repo>/` に自動デプロイされる。
 
 ```bash
-# (a) フロント静的サーバー (port 3000)
-cd frontend && npm run dev
+git push origin main
+# Actions タブで Deploy frontend to GitHub Pages が完走するのを確認
+# 出てきた URL を LINE Developersコンソールの「開発用 エンドポイントURL」に登録
+```
 
-# (b) IAPサーバー (port 4000)
+ローカルで挙動確認だけしたい場合は `cd frontend && npm run dev` で `http://localhost:3000` も使えるが、**LIFFはHTTPS必須**なので実機からは開けない。
+
+#### (B) server：ローカル起動 ＋ ngrok でトンネル
+
+Webhook の受信が必要なので、開発中は ngrok 等のHTTPSトンネルが必須。
+
+```bash
+# (b-1) IAPサーバーをローカル起動 (port 4000)
 cd server && npm run dev
 
-# (c) フロント用 HTTPS トンネル
-ngrok http 3000
-# → 出てきた https://xxxx.ngrok-free.app を
-#   LINE Developersコンソールの「Developing エンドポイントURL」に登録
-
-# (d) サーバー用 HTTPS トンネル（IAP Webhook受信に必要）
+# (b-2) サーバー用 HTTPS トンネル（IAP Webhook受信に必要）
 ngrok http 4000
 # → 出てきた https://yyyy.ngrok-free.app/iap/webhook を
 #   コンソールの「アプリ内課金 → 設定 → Webhook URL」に登録
 ```
 
-> フロントから `/iap/reserve` を叩く際、ngrok URLが2つあると都合が悪い。本リポジトリの開発デフォルトでは **同じオリジン** で動かす想定。手っ取り早くするには、フロント側に簡単なリバースプロキシを噛ますか、cloudflared tunnelで1ドメインに集約するのが楽。詳細は `docs/development-notes.md` の「サーバー混在オリジン問題」を参照。
+#### フロント→サーバー間の通信について
+
+frontend を GitHub Pages に置くと、サーバー（ngrok URL）とは別オリジンになる。`frontend/src/liff-bridge.js` の `SERVER_ORIGIN` に **server側ngrok URL** を設定し、`server/` 側で CORS を許可する必要がある。詳細は `docs/development-notes.md` の「サーバー混在オリジン問題」を参照。
 
 ### 5. 実機で開く
 
-スマホのLINEで `https://miniapp.line.me/{LIFF_ID}` を開くと、ngrok経由でローカルのフロントが起動する。LIFFがログイン処理を済ませた後、タイトル画面が出る。
+スマホのLINEで `https://miniapp.line.me/{LIFF_ID}` を開くと、GitHub Pages 上の frontend が起動する。LIFFがログイン処理を済ませた後、タイトル画面が出る。
 
 ---
 

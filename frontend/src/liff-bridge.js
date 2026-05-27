@@ -10,7 +10,7 @@
  */
 (function (global) {
   // ====== 設定 ======
-  var LIFF_ID = "2000000000-XXXXXXXX"; // ← HUMAN-SETUP.md の B-2 で控えた値に置き換え
+  var LIFF_ID = "2010215624-nWbKPOv5"; // ← HUMAN-SETUP.md の B-2 で控えた値に置き換え
   // サーバー（IAP予約・Webhook受信）のオリジン。同一オリジンならそのまま "" でよい。
   var SERVER_ORIGIN = "";
 
